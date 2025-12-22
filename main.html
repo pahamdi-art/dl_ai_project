@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Menu</title>
+    <title>Memory Card Game</title>
     <style>
         * {
             margin: 0;
@@ -12,42 +12,44 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Courier New', monospace;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             transition: background 0.3s;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
         }
 
         body.light {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #87CEEB;
         }
 
         body.dark {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background: #1a1a2e;
         }
 
         body.colorful {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: #ff6b9d;
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            min-width: 400px;
+            background: #2d2d2d;
+            border: 4px solid #000;
+            box-shadow: 8px 8px 0px #000;
+            padding: 30px;
+            min-width: 500px;
         }
 
         h1 {
-            color: white;
+            color: #fff;
             text-align: center;
-            margin-bottom: 30px;
-            font-size: 2.5em;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+            font-size: 2em;
+            text-shadow: 3px 3px 0px #000;
+            letter-spacing: 2px;
         }
 
         .page {
@@ -56,12 +58,6 @@
 
         .page.active {
             display: block;
-            animation: fadeIn 0.3s;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .menu-btn {
@@ -69,24 +65,43 @@
             padding: 15px;
             margin: 10px 0;
             font-size: 1.2em;
-            border: none;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s;
+            font-family: 'Courier New', monospace;
             font-weight: bold;
+            border: 4px solid #000;
+            background: #4CAF50;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.1s;
+            text-shadow: 2px 2px 0px #000;
+            box-shadow: 4px 4px 0px #000;
         }
 
         .menu-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            background: #45a049;
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #000;
+        }
+
+        .menu-btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px #000;
         }
 
         .back-btn {
-            background: rgba(255, 255, 255, 0.15);
+            background: #f44336;
             margin-top: 20px;
+        }
+
+        .back-btn:hover {
+            background: #da190b;
+        }
+
+        .exit-btn {
+            background: #9E9E9E;
+        }
+
+        .exit-btn:hover {
+            background: #757575;
         }
 
         .option-group {
@@ -94,9 +109,10 @@
         }
 
         .option-group h3 {
-            color: white;
+            color: #fff;
             margin-bottom: 10px;
             font-size: 1.3em;
+            text-shadow: 2px 2px 0px #000;
         }
 
         .option-btn {
@@ -104,32 +120,221 @@
             padding: 12px;
             margin: 8px 0;
             font-size: 1em;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            border: 4px solid #000;
+            background: #888;
+            color: #fff;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.1s;
+            text-shadow: 2px 2px 0px #000;
+            box-shadow: 3px 3px 0px #000;
         }
 
         .option-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: #999;
         }
 
         .option-btn.selected {
-            background: rgba(255, 255, 255, 0.4);
-            border-color: white;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            background: #FFC107;
+            box-shadow: 0 0 0 4px #fff, 3px 3px 0px 4px #000;
         }
 
         .start-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #2196F3;
             margin-top: 30px;
             font-size: 1.3em;
         }
 
         .start-btn:hover {
-            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            background: #0b7dda;
+        }
+
+        /* Game Styles */
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .game-stats {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 20px;
+            color: #fff;
+            font-size: 1.2em;
+            text-shadow: 2px 2px 0px #000;
+        }
+
+        .stat {
+            background: #555;
+            padding: 10px 20px;
+            border: 3px solid #000;
+            box-shadow: 3px 3px 0px #000;
+        }
+
+        .stat.warning {
+            background: #FF9800;
+        }
+
+        .stat.danger {
+            background: #f44336;
+            animation: pulse 0.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .game-board {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .game-board.easy {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .game-board.medium {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .game-board.hard {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .game-board.extreme {
+            grid-template-columns: repeat(5, 1fr);
+        }
+
+        .card {
+            width: 80px;
+            height: 80px;
+            background: #4CAF50;
+            border: 4px solid #000;
+            box-shadow: 4px 4px 0px #000;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            transition: all 0.1s;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #000;
+        }
+
+        .card:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px #000;
+        }
+
+        .card.flipped {
+            background: #fff;
+        }
+
+        .card.matched {
+            background: #FFC107;
+            cursor: default;
+        }
+
+        .card.matched:hover {
+            transform: none;
+            box-shadow: 4px 4px 0px #000;
+        }
+
+        .card.preview {
+            background: #fff;
+            pointer-events: none;
+        }
+
+        .card.preview .card-back {
+            display: none;
+        }
+
+        .card.preview .card-front {
+            display: block;
+        }
+
+        .card-back::before {
+            content: '?';
+            color: #fff;
+            font-size: 2em;
+            font-weight: bold;
+            text-shadow: 3px 3px 0px #000;
+        }
+
+        .card-front {
+            display: none;
+        }
+
+        .card.flipped .card-back {
+            display: none;
+        }
+
+        .card.flipped .card-front {
+            display: block;
+        }
+
+        .preview-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #2196F3;
+            border: 6px solid #000;
+            box-shadow: 10px 10px 0px #000;
+            padding: 30px 50px;
+            text-align: center;
+            color: #fff;
+            font-size: 2em;
+            text-shadow: 3px 3px 0px #000;
+            display: none;
+            z-index: 1000;
+        }
+
+        .preview-message.show {
+            display: block;
+        }
+
+        .win-message, .lose-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 6px solid #000;
+            box-shadow: 10px 10px 0px #000;
+            padding: 40px;
+            text-align: center;
+            color: #fff;
+            font-size: 1.5em;
+            text-shadow: 3px 3px 0px #000;
+            display: none;
+            z-index: 1000;
+        }
+
+        .win-message {
+            background: #4CAF50;
+        }
+
+        .lose-message {
+            background: #f44336;
+        }
+
+        .win-message.show, .lose-message.show {
+            display: block;
+            animation: bounce 0.5s;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.1); }
         }
     </style>
 </head>
@@ -137,54 +342,95 @@
     <div class="container">
         <!-- Main Menu Page -->
         <div id="mainPage" class="page active">
-            <h1>🎮 Game Menu</h1>
-            <button class="menu-btn" onclick="showPage('settingsPage')">⚙️ Settings</button>
-            <button class="menu-btn" onclick="showPage('difficultyPage')">🎯 Difficulty</button>
-            <button class="menu-btn" onclick="showPage('themePage')">🎨 Themes</button>
+            <h1>MEMORY GAME</h1>
+            <button class="menu-btn" onclick="showPage('settingsPage')">SETTINGS</button>
+            <button class="menu-btn" onclick="showPage('difficultyPage')">DIFFICULTY</button>
+            <button class="menu-btn exit-btn" onclick="exitGame()">EXIT</button>
         </div>
 
         <!-- Settings Page -->
         <div id="settingsPage" class="page">
-            <h1>⚙️ Settings</h1>
+            <h1>SETTINGS</h1>
             <div class="option-group">
-                <h3>Sound</h3>
-                <button class="option-btn selected" onclick="selectOption(this, 'sound')">🔊 On</button>
-                <button class="option-btn" onclick="selectOption(this, 'sound')">🔇 Off</button>
+                <h3>SOUND</h3>
+                <button class="option-btn selected" onclick="selectOption(this, 'sound')">ON</button>
+                <button class="option-btn" onclick="selectOption(this, 'sound')">OFF</button>
             </div>
             <div class="option-group">
-                <h3>Music</h3>
-                <button class="option-btn selected" onclick="selectOption(this, 'music')">🎵 On</button>
-                <button class="option-btn" onclick="selectOption(this, 'music')">🎵 Off</button>
+                <h3>MUSIC</h3>
+                <button class="option-btn selected" onclick="selectOption(this, 'music')">ON</button>
+                <button class="option-btn" onclick="selectOption(this, 'music')">OFF</button>
             </div>
-            <button class="menu-btn back-btn" onclick="showPage('mainPage')">← Back</button>
+            <div class="option-group">
+                <h3>THEME</h3>
+                <button class="option-btn selected" onclick="changeTheme('light', this)">LIGHT</button>
+                <button class="option-btn" onclick="changeTheme('dark', this)">DARK</button>
+                <button class="option-btn" onclick="changeTheme('colorful', this)">COLORFUL</button>
+            </div>
+            <button class="menu-btn back-btn" onclick="showPage('mainPage')">BACK</button>
         </div>
 
         <!-- Difficulty Page -->
         <div id="difficultyPage" class="page">
-            <h1>🎯 Difficulty</h1>
+            <h1>DIFFICULTY</h1>
             <div class="option-group">
-                <button class="option-btn" onclick="selectOption(this, 'difficulty')">😊 Easy</button>
-                <button class="option-btn selected" onclick="selectOption(this, 'difficulty')">😐 Medium</button>
-                <button class="option-btn" onclick="selectOption(this, 'difficulty')">😈 Hard</button>
-                <button class="option-btn" onclick="selectOption(this, 'difficulty')">💀 Extreme</button>
+                <button class="option-btn" onclick="selectOption(this, 'difficulty')" data-difficulty="easy" data-pairs="6" data-preview="5" data-moves="20" data-time="120">EASY (6 PAIRS)</button>
+                <button class="option-btn selected" onclick="selectOption(this, 'difficulty')" data-difficulty="medium" data-pairs="8" data-preview="4" data-moves="25" data-time="90">MEDIUM (8 PAIRS)</button>
+                <button class="option-btn" onclick="selectOption(this, 'difficulty')" data-difficulty="hard" data-pairs="12" data-preview="3" data-moves="30" data-time="120">HARD (12 PAIRS)</button>
+                <button class="option-btn" onclick="selectOption(this, 'difficulty')" data-difficulty="extreme" data-pairs="15" data-preview="2" data-moves="35" data-time="150">EXTREME (15 PAIRS)</button>
             </div>
-            <button class="menu-btn start-btn" onclick="startGame()">Start Game ▶️</button>
-            <button class="menu-btn back-btn" onclick="showPage('mainPage')">← Back</button>
+            <button class="menu-btn start-btn" onclick="startGame()">START GAME</button>
+            <button class="menu-btn back-btn" onclick="showPage('mainPage')">BACK</button>
         </div>
 
-        <!-- Theme Page -->
-        <div id="themePage" class="page">
-            <h1>🎨 Themes</h1>
-            <div class="option-group">
-                <button class="option-btn selected" onclick="changeTheme('light', this)">☀️ Light</button>
-                <button class="option-btn" onclick="changeTheme('dark', this)">🌙 Dark</button>
-                <button class="option-btn" onclick="changeTheme('colorful', this)">🌈 Colorful</button>
+        <!-- Game Page -->
+        <div id="gamePage" class="page">
+            <h1>MEMORY GAME</h1>
+            <div class="game-container">
+                <div class="game-stats">
+                    <div class="stat" id="movesContainer">MOVES: <span id="moves">0</span>/<span id="maxMoves">25</span></div>
+                    <div class="stat" id="timerContainer">TIME: <span id="timer">0</span>/<span id="maxTime">90</span>s</div>
+                </div>
+                <div id="gameBoard" class="game-board medium"></div>
+                <button class="menu-btn back-btn" onclick="showPage('mainPage'); resetGame();">QUIT</button>
             </div>
-            <button class="menu-btn back-btn" onclick="showPage('mainPage')">← Back</button>
         </div>
     </div>
 
+    <div id="previewMessage" class="preview-message">
+        <div>MEMORIZE!</div>
+        <div id="previewCounter" style="font-size: 3em; margin-top: 10px;">3</div>
+    </div>
+
+    <div id="winMessage" class="win-message">
+        <h2>YOU WIN!</h2>
+        <p>Moves: <span id="finalMoves"></span></p>
+        <p>Time: <span id="finalTime"></span>s</p>
+        <button class="menu-btn" onclick="hideWin(); startGame();" style="margin-top: 20px;">PLAY AGAIN</button>
+        <button class="menu-btn back-btn" onclick="hideWin(); showPage('mainPage'); resetGame();">MAIN MENU</button>
+    </div>
+
+    <div id="loseMessage" class="lose-message">
+        <h2>GAME OVER!</h2>
+        <p id="loseReason"></p>
+        <button class="menu-btn" onclick="hideLose(); startGame();" style="margin-top: 20px;">TRY AGAIN</button>
+        <button class="menu-btn back-btn" onclick="hideLose(); showPage('mainPage'); resetGame();">MAIN MENU</button>
+    </div>
+
     <script>
+        let cards = [];
+        let flippedCards = [];
+        let matchedPairs = 0;
+        let moves = 0;
+        let timer = 0;
+        let timerInterval;
+        let canFlip = false;
+        let maxMoves = 25;
+        let maxTime = 90;
+        let totalPairs = 8;
+
+        const emojis = ['🎮', '🎲', '🎯', '🎨', '🎭', '🎪', '🎸', '🎹', '🎺', '🎻', '🎤', '🎧', '🎬', '🎼', '🏀', '⚽', '🎾', '🏈', '⚾', '🏐'];
+
         function showPage(pageId) {
             const pages = document.querySelectorAll('.page');
             pages.forEach(page => page.classList.remove('active'));
@@ -204,9 +450,196 @@
             btn.classList.add('selected');
         }
 
+        function exitGame() {
+            if (confirm('Are you sure you want to exit the game?')) {
+                window.close();
+                setTimeout(() => {
+                    alert('Thanks for playing! You can close this tab manually.');
+                }, 100);
+            }
+        }
+
         function startGame() {
-            const difficulty = document.querySelector('#difficultyPage .option-btn.selected').textContent;
-            alert('Starting game with ' + difficulty + ' difficulty!');
+            const selectedDifficulty = document.querySelector('#difficultyPage .option-btn.selected');
+            const difficulty = selectedDifficulty.dataset.difficulty;
+            const pairs = parseInt(selectedDifficulty.dataset.pairs);
+            const previewTime = parseInt(selectedDifficulty.dataset.preview);
+            maxMoves = parseInt(selectedDifficulty.dataset.moves);
+            maxTime = parseInt(selectedDifficulty.dataset.time);
+            totalPairs = pairs;
+            
+            resetGame();
+            document.getElementById('maxMoves').textContent = maxMoves;
+            document.getElementById('maxTime').textContent = maxTime;
+            
+            setupGame(difficulty, pairs);
+            showPage('gamePage');
+            
+            showPreview(previewTime);
+        }
+
+        function setupGame(difficulty, pairs) {
+            const gameBoard = document.getElementById('gameBoard');
+            gameBoard.className = `game-board ${difficulty}`;
+            gameBoard.innerHTML = '';
+            
+            const selectedEmojis = emojis.slice(0, pairs);
+            cards = [...selectedEmojis, ...selectedEmojis];
+            shuffleArray(cards);
+            
+            cards.forEach((emoji, index) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.dataset.index = index;
+                card.dataset.emoji = emoji;
+                card.innerHTML = `
+                    <div class="card-back"></div>
+                    <div class="card-front">${emoji}</div>
+                `;
+                card.addEventListener('click', flipCard);
+                gameBoard.appendChild(card);
+            });
+        }
+
+        function showPreview(seconds) {
+            const allCards = document.querySelectorAll('.card');
+            allCards.forEach(card => card.classList.add('preview'));
+            
+            const previewMsg = document.getElementById('previewMessage');
+            const previewCounter = document.getElementById('previewCounter');
+            previewMsg.classList.add('show');
+            previewCounter.textContent = seconds;
+            
+            let countdown = seconds;
+            const countdownInterval = setInterval(() => {
+                countdown--;
+                previewCounter.textContent = countdown;
+                
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    previewMsg.classList.remove('show');
+                    allCards.forEach(card => card.classList.remove('preview'));
+                    canFlip = true;
+                    startTimer();
+                }
+            }, 1000);
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function flipCard() {
+            if (!canFlip || this.classList.contains('flipped') || this.classList.contains('matched')) return;
+            
+            this.classList.add('flipped');
+            flippedCards.push(this);
+            
+            if (flippedCards.length === 2) {
+                canFlip = false;
+                moves++;
+                document.getElementById('moves').textContent = moves;
+                updateStatColors();
+                
+                if (moves >= maxMoves) {
+                    setTimeout(() => gameLose('Out of moves!'), 600);
+                    return;
+                }
+                
+                setTimeout(checkMatch, 600);
+            }
+        }
+
+        function checkMatch() {
+            const [card1, card2] = flippedCards;
+            
+            if (card1.dataset.emoji === card2.dataset.emoji) {
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+                matchedPairs++;
+                
+                if (matchedPairs === totalPairs) {
+                    setTimeout(showWin, 500);
+                }
+            } else {
+                card1.classList.remove('flipped');
+                card2.classList.remove('flipped');
+            }
+            
+            flippedCards = [];
+            canFlip = true;
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timer++;
+                document.getElementById('timer').textContent = timer;
+                updateStatColors();
+                
+                if (timer >= maxTime) {
+                    gameLose('Time\'s up!');
+                }
+            }, 1000);
+        }
+
+        function updateStatColors() {
+            const movesContainer = document.getElementById('movesContainer');
+            const timerContainer = document.getElementById('timerContainer');
+            
+            movesContainer.classList.remove('warning', 'danger');
+            timerContainer.classList.remove('warning', 'danger');
+            
+            if (moves >= maxMoves * 0.8) {
+                movesContainer.classList.add('danger');
+            } else if (moves >= maxMoves * 0.6) {
+                movesContainer.classList.add('warning');
+            }
+            
+            if (timer >= maxTime * 0.8) {
+                timerContainer.classList.add('danger');
+            } else if (timer >= maxTime * 0.6) {
+                timerContainer.classList.add('warning');
+            }
+        }
+
+        function resetGame() {
+            clearInterval(timerInterval);
+            cards = [];
+            flippedCards = [];
+            matchedPairs = 0;
+            moves = 0;
+            timer = 0;
+            canFlip = false;
+            document.getElementById('moves').textContent = '0';
+            document.getElementById('timer').textContent = '0';
+            document.getElementById('movesContainer').classList.remove('warning', 'danger');
+            document.getElementById('timerContainer').classList.remove('warning', 'danger');
+        }
+
+        function showWin() {
+            clearInterval(timerInterval);
+            canFlip = false;
+            document.getElementById('finalMoves').textContent = moves;
+            document.getElementById('finalTime').textContent = timer;
+            document.getElementById('winMessage').classList.add('show');
+        }
+
+        function hideWin() {
+            document.getElementById('winMessage').classList.remove('show');
+        }
+
+        function gameLose(reason) {
+            clearInterval(timerInterval);
+            canFlip = false;
+            document.getElementById('loseReason').textContent = reason;
+            document.getElementById('loseMessage').classList.add('show');
+        }
+
+        function hideLose() {
+            document.getElementById('loseMessage').classList.remove('show');
         }
     </script>
 </body>
